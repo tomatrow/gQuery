@@ -27,6 +27,7 @@ declare type gFetchProperties = {
 };
 export declare type GClientOptions = {
     path?: string;
+    headers?: object;
 };
 export declare type GGetParameters<Variables> = {
     variables?: Variables;
@@ -35,6 +36,7 @@ export declare type GGetParameters<Variables> = {
 export declare type GFetchReturnWithErrors<T> = Spread<[T, GFetchQueryDefault]>;
 export declare class GFetch extends Object {
     path: string;
+    headers: object;
     constructor(options: GClientOptions);
     fetch<T>({ queries, fetch, }: gFetchProperties | undefined): Promise<GFetchReturnWithErrors<T>>;
 }

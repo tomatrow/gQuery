@@ -61,6 +61,7 @@ type gFetchProperties = {
 
 export type GClientOptions = {
   path?: string;
+  headers?: object;
 };
 
 export type GGetParameters<Variables> = {
@@ -72,18 +73,22 @@ export type GFetchReturnWithErrors<T> = Spread<[T, GFetchQueryDefault]>;
 
 export class GFetch extends Object {
   public path: string;
+  public headers: object;
 
   constructor(options: GClientOptions) {
     super();
-    const { path } = options;
-    this.path = path;
+    const { path, headers } = options;
+    this.path = path as string;
+    this.headers = headers ?? {};
     this.fetch = this.fetch.bind(this);
   }
 
   // * gFetch
   // This is a fetcher that returns a promise that resolves to a graphql response
   public async fetch<T>({
+    // @ts-ignore
     queries,
+    // @ts-ignore
     fetch,
   }: gFetchProperties | undefined): Promise<GFetchReturnWithErrors<T>> {
     // let document: DocumentNode = addTypenameToDocument(queries[0].query);
@@ -99,7 +104,7 @@ export class GFetch extends Object {
     const res = await fetch(this.path, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: { ...this.headers, "Content-Type": "application/json" },
       body: JSON.stringify(newQueries),
     });
 
